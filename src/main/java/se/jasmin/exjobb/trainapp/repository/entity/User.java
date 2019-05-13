@@ -2,6 +2,7 @@ package se.jasmin.exjobb.trainapp.repository.entity;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "user")
@@ -21,6 +22,12 @@ public class User {
 
     @Column(name = "goals")
     private String goals;
+
+
+    @Column
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private List<Exercise> exerciseList;
 
     @Column
     @OneToMany(cascade = CascadeType.ALL)
@@ -65,6 +72,24 @@ public class User {
 
     public void setWeightTrackList(List<WeightTrack> weightTrackList) {
         this.weightTrackList = weightTrackList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(name, user.name) &&
+                Objects.equals(goals, user.goals) &&
+                Objects.equals(exerciseList, user.exerciseList) &&
+                Objects.equals(weightTrackList, user.weightTrackList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, name, goals, exerciseList, weightTrackList);
     }
 
     @Override
