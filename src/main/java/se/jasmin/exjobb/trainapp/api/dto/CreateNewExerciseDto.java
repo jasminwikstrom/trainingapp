@@ -2,7 +2,7 @@ package se.jasmin.exjobb.trainapp.api.dto;
 
 import se.jasmin.exjobb.trainapp.repository.entity.MuscleGroup;
 
-public class CreateNewMachineDto {
+public class CreateNewExerciseDto {
 
 
     private String name;
@@ -10,10 +10,10 @@ public class CreateNewMachineDto {
     private MuscleGroup muscleGroup;
 
 
-    public CreateNewMachineDto() {
+    public CreateNewExerciseDto() {
     }
 
-    public CreateNewMachineDto(String name) {
+    public CreateNewExerciseDto(String name) {
         this.name = name;
     }
 
@@ -44,7 +44,7 @@ public class CreateNewMachineDto {
 
     @Override
     public String toString() {
-        return "CreateNewMachineDto{" +
+        return "CreateNewExerciseDto{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", muscleGroup=" + muscleGroup +

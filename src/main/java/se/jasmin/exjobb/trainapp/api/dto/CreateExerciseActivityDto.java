@@ -1,6 +1,6 @@
 package se.jasmin.exjobb.trainapp.api.dto;
 
-public class CreateMachineActivityDto {
+public class CreateExerciseActivityDto {
 
     private  int Weight;
 

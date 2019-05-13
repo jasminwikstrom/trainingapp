@@ -1,17 +1,14 @@
 package se.jasmin.exjobb.trainapp.service;
-
-import se.jasmin.exjobb.trainapp.api.dto.CreateNewExercisDto;
-import se.jasmin.exjobb.trainapp.repository.entity.Exercis;
-import se.jasmin.exjobb.trainapp.repository.entity.ExercisActivity;
-
+import se.jasmin.exjobb.trainapp.api.dto.CreateNewExerciseDto;
+import se.jasmin.exjobb.trainapp.repository.entity.Exercise;
 import java.util.List;
 
 
 
-public interface ExercisService {
-    Exercis createExercis(CreateNewExercisDto createNewExercisDto);
+public interface ExerciseService {
+    Exercise createExercise(CreateNewExerciseDto createNewExerciseDto);
 
-    List<Exercis> getExercise(String name);
+    List<Exercise> getExercises(String name);
 
 
 

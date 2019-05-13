@@ -4,26 +4,25 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "MACHINE_ACTIVITY")
-public class MachineActivity {
+@Table(name = "exercise_activity")
+public class ExerciseActivity {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "WEIGHT", nullable = false)
+    @Column(name = "weight", nullable = false)
     private Integer weight;
 
-    @Column(name = "DATE", nullable = false)
+    @Column(name = "date", nullable = false)
     @CreatedDate
     private LocalDateTime created;
 
@@ -55,7 +54,7 @@ public class MachineActivity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MachineActivity that = (MachineActivity) o;
+        ExerciseActivity that = (ExerciseActivity) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(weight, that.weight) &&
                 Objects.equals(created, that.created);
@@ -68,7 +67,7 @@ public class MachineActivity {
 
     @Override
     public String toString() {
-        return "MachineActivity{" +
+        return "ExerciseActivity{" +
                 "id=" + id +
                 ", weight='" + weight + '\'' +
                 ", created=" + created +

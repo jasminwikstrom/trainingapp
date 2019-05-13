@@ -4,19 +4,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import se.jasmin.exjobb.trainapp.repository.entity.Machine;
+import se.jasmin.exjobb.trainapp.repository.entity.Exercise;
 
 import java.util.List;
 
 @Repository
 
-  public interface MachineRepository extends JpaRepository<Machine, Long> {
+  public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
 
         @Query(value =
-                "SELECT b FROM Machine b " +
+                "SELECT b FROM Exercise b " +
 
                         "WHERE (:name IS NULL OR b.name = :name) ")
-        List<Machine> findByQuery(
+        List<Exercise> findByQuery(
                 @Param("name") String name);
 
     }

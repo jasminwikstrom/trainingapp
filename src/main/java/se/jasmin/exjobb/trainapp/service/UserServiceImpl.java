@@ -13,7 +13,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserRepository UserRepository;
+    private UserRepository userRepository;
 
     public User createUser(CreateNewUserDto createNewUserDto) {
 
@@ -28,31 +28,15 @@ public class UserServiceImpl implements UserService {
         newUser.setGoals(createNewUserDto.getGoals());
         newUser.setWeightTrackList(List.of());
 
-        return UserRepository.save(newUser);
+        return userRepository.save(newUser);
     }
 
     @Override
-    public List<User> getUsers(String name) {
+    public List<User> getUsers(String username) {
 
-        List<User> users = machineRepository.findByQuery(name);
+        List<User> users = userRepository.findByQuery(username);
         return users;
     }
+}
 
-
-
-
-
-//@Override
-//public Optional<Machine> updateMachine(String id, UpdateMachineDto updateMachineDto) {
-//    Optional<Machine> foundMachine = machineRepository.findById(Long.parseLong(id));
-//
-//    return foundMachine.map(machine -> {
-//
-//        if (updateMachineDto.getDescription() != null) {
-//            machine.setDescription(updateMachineDto.getDescription());
-//            return machineRepository.save(machine);
-//        }
-//        return machine;
-//    });
-//}
 

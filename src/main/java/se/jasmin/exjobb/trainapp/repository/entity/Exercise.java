@@ -5,29 +5,29 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "MACHINE")
-public class Machine {
+@Table(name = "exercise")
+public class Exercise {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "description")
     private String description;
 
-    @Column (name = "MUSCLE_GROUP")
+    @Column (name = "muscle_group")
     @Enumerated(value = EnumType.STRING)
     private MuscleGroup muscleGroup;
 
     @Column
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "MACHINE_ID", referencedColumnName = "ID", nullable = false)
-    private List<MachineActivity> machineActivityList;
+    @JoinColumn(name = "exercise_id", referencedColumnName = "id", nullable = false)
+    private List<ExerciseActivity> exerciseActivityList;
 
     public Long getId() {
         return id;
@@ -61,22 +61,22 @@ public class Machine {
         this.muscleGroup = muscleGroup;
     }
 
-    public List<MachineActivity> getMachineActivityList() {
-        return machineActivityList;
+    public List<ExerciseActivity> getExerciseActivityList() {
+        return exerciseActivityList;
     }
 
-    public void setMachineActivityList(List<MachineActivity> machineActivityList) {
-        this.machineActivityList = machineActivityList;
+    public void setExerciseActivityList(List<ExerciseActivity> exerciseActivityList) {
+        this.exerciseActivityList = exerciseActivityList;
     }
 
     @Override
     public String toString() {
-        return "Machine{" +
+        return "Exercise{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", muscleGroup=" + muscleGroup +
-                ", machineActivityList=" + machineActivityList +
+                ", exerciseActivityList=" + exerciseActivityList +
                 '}';
     }
 }
