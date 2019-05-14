@@ -1,14 +1,19 @@
 package se.jasmin.exjobb.trainapp.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import se.jasmin.exjobb.trainapp.api.dto.CreateExerciseActivityDto;
-import se.jasmin.exjobb.trainapp.api.dto.CreateNewExerciseDto;
+import se.jasmin.exjobb.trainapp.api.dto.*;
 import se.jasmin.exjobb.trainapp.repository.entity.Exercise;
 import se.jasmin.exjobb.trainapp.service.ExerciseActivityService;
 import se.jasmin.exjobb.trainapp.service.ExerciseService;
+import se.jasmin.exjobb.trainapp.service.StatService;
+
+import java.net.http.HttpResponse;
+import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -21,18 +26,23 @@ public class ExerciseController {
     @Autowired
     private ExerciseActivityService exerciseActivityService;
 
+    @Autowired
+    private StatService statService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Exercise createNewExercise(@RequestBody CreateNewExerciseDto createNewExerciseDto) {
 
-        var savedMachine = exerciseService.createExercise(createNewExerciseDto);
 
-        return ResponseEntity.ok(savedMachine).getBody();
+
+    @PostMapping (consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Optional<Exercise> createNewExercise(@RequestBody CreateNewExerciseDto createNewExerciseDto) {
+
+        var savedExercise = exerciseService.createExercise(createNewExerciseDto);
+
+        return ResponseEntity.ok(savedExercise).getBody();
     }
 
 
     @GetMapping
-    public Exercise getAllMachine(@RequestParam(value = "name", required = false) String title) {
+    public Exercise getAllExercises(@RequestParam(value = "name", required = false) String title) {
 
         Exercise exercise = (Exercise) exerciseService.getExercises(title);
 
@@ -51,5 +61,40 @@ public class ExerciseController {
         } else {
             return ResponseEntity.ok(optionalExerciseActivity.get());
         }
+
     }
+
+
+    @GetMapping ("/{id}/progress")
+    public ResponseEntity getProgress(
+            @PathVariable(value = "id") String id,
+            @RequestBody ProgressDto progressDto) {
+
+        var progress = statService.getProgress(progressDto, id);
+
+        return ResponseEntity.ok(progress);
+
+
+    }
+
+        @GetMapping ("/{id}/average")
+        public ResponseEntity getAverage(
+                @PathVariable(value = "id") String id,
+                @RequestBody AverageDto averageDto) {
+
+            var average = statService.getAverage(averageDto, id);
+
+            return ResponseEntity.ok(average);
+
+
+        }
+
+
+
+
+
+
+
+    //GetStatsAverage
+    //GetHistory
 }

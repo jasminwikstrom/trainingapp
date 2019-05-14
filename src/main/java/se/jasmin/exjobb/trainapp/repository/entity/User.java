@@ -74,6 +74,14 @@ public class User {
         this.weightTrackList = weightTrackList;
     }
 
+    public List<Exercise> getExerciseList() {
+        return exerciseList;
+    }
+
+    public void setExerciseList(List<Exercise> exerciseList) {
+        this.exerciseList = exerciseList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
