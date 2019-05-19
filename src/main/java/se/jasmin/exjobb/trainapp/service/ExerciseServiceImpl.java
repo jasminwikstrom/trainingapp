@@ -6,6 +6,7 @@ import se.jasmin.exjobb.trainapp.api.dto.CreateNewExerciseDto;
 import se.jasmin.exjobb.trainapp.repository.ExerciseRepository;
 import se.jasmin.exjobb.trainapp.repository.UserRepository;
 import se.jasmin.exjobb.trainapp.repository.entity.Exercise;
+import se.jasmin.exjobb.trainapp.repository.entity.User;
 
 import javax.transaction.Transactional;
 import java.util.Comparator;
@@ -23,44 +24,36 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Autowired
     private ExerciseRepository exerciseRepository;
 
-    public Optional<Exercise> createExercise(CreateNewExerciseDto createNewExerciseDto) {
+    @Override
+    public Optional<Exercise> createExercise(User user, CreateNewExerciseDto createNewExerciseDto) {
 
         if (createNewExerciseDto.getName() == null) {
             throw new RuntimeException("Title can not be null");
         }
 
-        var user = userRepository.findById(Long.valueOf(createNewExerciseDto.getUserId()));
 
-        if (user.isPresent()) {
-
-            var newExercise = new Exercise();
-            newExercise.setName(createNewExerciseDto.getName());
-            newExercise.setDescription(createNewExerciseDto.getDescription());
-            newExercise.setMuscleGroup(createNewExerciseDto.getMuscleGroup());
+        var newExercise = new Exercise();
+        newExercise.setName(createNewExerciseDto.getName());
+        newExercise.setDescription(createNewExerciseDto.getDescription());
+        newExercise.setMuscleGroup(createNewExerciseDto.getMuscleGroup());
 
 
+        user.getExerciseList().add(newExercise);
+        var savedUser = userRepository.save(user);
 
-            user.get().getExerciseList().add(newExercise);
-            var savedUser = userRepository.save(user.get());
+        var addedExercice = savedUser.getExerciseList().stream()
+                .max(Comparator.comparing(Exercise::getCreated));
 
-            var addedExercice = savedUser.getExerciseList().stream()
-                    .max(Comparator.comparing(Exercise::getCreated));
+        return addedExercice;
 
-            return addedExercice;
-        } else {
-            return Optional.empty();
-        }
     }
 
     @Override
     public List<Exercise> getExercises(String name) {
 
-        List<Exercise> exercises = exerciseRepository.findByQuery(name);
+    List<Exercise> exercises = exerciseRepository.findByQuery(name);
         return exercises;
-    }
-
-
-
+}
 
 
     //@Override

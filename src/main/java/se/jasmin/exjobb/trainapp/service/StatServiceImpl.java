@@ -1,6 +1,5 @@
 package se.jasmin.exjobb.trainapp.service;
 
-import org.hibernate.query.criteria.internal.expression.function.AggregationFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.jasmin.exjobb.trainapp.api.dto.AverageDto;
@@ -11,7 +10,6 @@ import se.jasmin.exjobb.trainapp.repository.UserRepository;
 import se.jasmin.exjobb.trainapp.repository.entity.ExerciseActivity;
 
 import java.time.LocalDateTime;
-
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.stream.Collectors;
@@ -22,16 +20,15 @@ public class StatServiceImpl implements StatService {
     @Autowired
     private UserRepository userRepository;
 
-
     @Override
-    public ProgressStat getProgress(ProgressDto progressDto, String id) {
+    public ProgressStat getProgress(ProgressDto progressDto, Long userId, String id) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         var from = LocalDateTime.parse(progressDto.getFrom(), formatter);
         var to = LocalDateTime.parse(progressDto.getTo(), formatter);
 
-        var user = userRepository.findById(1l); //TODO Byta mot anvdId från anvSession efter inlogg
+        var user = userRepository.findById(userId);
 
         if (user.isEmpty()) {
             return null;
@@ -81,7 +78,7 @@ public class StatServiceImpl implements StatService {
 
 
     @Override
-    public AverageStat getAverage(AverageDto averageDto, String id) {
+    public AverageStat getAverage(AverageDto averageDto,Long userId, String id) {
 
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -89,7 +86,7 @@ public class StatServiceImpl implements StatService {
         var from = LocalDateTime.parse(averageDto.getFrom(), formatter);
         var to = LocalDateTime.parse(averageDto.getTo(), formatter);
 
-        var user = userRepository.findById(1l); //TODO Byta mot anvdId från anvSession efter inlogg
+        var user = userRepository.findById(userId);
 
         if (user.isEmpty()) {
             return null;
@@ -118,19 +115,26 @@ public class StatServiceImpl implements StatService {
         if (exerciseActivityList.size() == 1) {
             var averageStat = new AverageStat();
             averageStat.setStartWeight(exerciseActivityList.get(0).getWeight());
-            averageStat.setaverage(0);
+            averageStat.setAverage(0);
         }
 
         var allActivityWeight = exerciseActivityList.stream()
                 .collect(Collectors.summingInt(ExerciseActivity::getWeight));
 
+        var firstActivity = exerciseActivityList.stream()
+                .min(Comparator.comparing(ExerciseActivity::getCreated));
 
-        var avg = allActivityWeight / exerciseActivityList.size();
+        var lastActivity = exerciseActivityList.stream()
+                .max(Comparator.comparing(ExerciseActivity::getCreated));
+
+        double avg = (double)allActivityWeight / (double)exerciseActivityList.size();
 
 
 
         var averageStat = new AverageStat();
-        averageStat.setaverage(avg);
+        averageStat.setStartWeight(firstActivity.get().getWeight());
+        averageStat.setStartWeight(lastActivity.get().getWeight());
+        averageStat.setAverage(avg);
 
 
 

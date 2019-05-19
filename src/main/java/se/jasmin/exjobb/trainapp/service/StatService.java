@@ -6,9 +6,9 @@ import se.jasmin.exjobb.trainapp.api.dto.ProgressDto;
 import se.jasmin.exjobb.trainapp.api.dto.ProgressStat;
 
 public interface StatService {
-    ProgressStat getProgress(ProgressDto progressDto, String id);
+    ProgressStat getProgress(ProgressDto progressDto, Long userId, String id);
 
-    AverageStat getAverage(AverageDto averageDto, String id);
+    AverageStat getAverage(AverageDto averageDto,Long userId, String id);
 
 
 }

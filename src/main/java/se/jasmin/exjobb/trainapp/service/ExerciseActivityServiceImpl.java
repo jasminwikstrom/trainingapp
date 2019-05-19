@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 import se.jasmin.exjobb.trainapp.api.dto.CreateExerciseActivityDto;
 import se.jasmin.exjobb.trainapp.repository.ExerciseRepository;
 import se.jasmin.exjobb.trainapp.repository.entity.ExerciseActivity;
+import se.jasmin.exjobb.trainapp.repository.entity.User;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,4 +39,8 @@ public class ExerciseActivityServiceImpl implements ExerciseActivityService {
 
         return Optional.ofNullable(savedActivity);
     }
+
+
+
+
 }
