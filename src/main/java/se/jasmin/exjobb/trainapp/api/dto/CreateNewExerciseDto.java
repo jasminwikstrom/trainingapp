@@ -10,7 +10,6 @@ public class CreateNewExerciseDto {
     private String name;
     private String description;
     private MuscleGroup muscleGroup;
-    private String userId;
 
 
     public CreateNewExerciseDto() {
@@ -44,7 +43,6 @@ public class CreateNewExerciseDto {
         this.muscleGroup = muscleGroup;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -52,13 +50,12 @@ public class CreateNewExerciseDto {
         CreateNewExerciseDto that = (CreateNewExerciseDto) o;
         return Objects.equals(name, that.name) &&
                 Objects.equals(description, that.description) &&
-                muscleGroup == that.muscleGroup &&
-                Objects.equals(userId, that.userId);
+                muscleGroup == that.muscleGroup;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, muscleGroup, userId);
+        return Objects.hash(name, description, muscleGroup);
     }
 
     @Override
@@ -67,15 +64,6 @@ public class CreateNewExerciseDto {
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", muscleGroup=" + muscleGroup +
-                ", userId='" + userId + '\'' +
                 '}';
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 }

@@ -3,6 +3,7 @@ package se.jasmin.exjobb.trainapp.repository.entity;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -14,15 +15,23 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Transient
+    private String passwordConfirm;
+
+    @Column(name = "name")
     private String name;
 
     @Column(name = "goals")
     private String goals;
 
+    @ManyToMany
+    private Set<Role> roles;
 
     @Column
     @OneToMany(cascade = CascadeType.ALL)
@@ -76,6 +85,31 @@ public class User {
 
     public List<Exercise> getExerciseList() {
         return exerciseList;
+    }
+
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public void setExerciseList(List<Exercise> exerciseList) {

@@ -3,7 +3,7 @@ package se.jasmin.exjobb.trainapp.api.dto;
 public class AverageStat {
     private int startWeight;
     private int endWeight;
-    private int average;
+    private double average;
 
     public int getStartWeight() {
         return startWeight;
@@ -21,11 +21,11 @@ public class AverageStat {
         this.endWeight = endWeight;
     }
 
-    public int getAverage() {
+    public double getAverage() {
         return average;
     }
 
-    public void setaverage(int average) {
+    public void setAverage(double average) {
         this.average = average;
     }
 }

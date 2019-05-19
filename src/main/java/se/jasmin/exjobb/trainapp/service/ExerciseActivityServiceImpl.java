@@ -37,4 +37,5 @@ public class ExerciseActivityServiceImpl implements ExerciseActivityService {
 
         return Optional.ofNullable(savedActivity);
     }
+
 }

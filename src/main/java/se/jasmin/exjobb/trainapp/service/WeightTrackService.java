@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface WeightTrackService {
 
-    Optional<WeightTrack> createNewWeightTrack(String id, CreateNewWeightTrackDto createNewWeightTrackDto);
+    Optional<WeightTrack> createNewWeightTrack(Long id, CreateNewWeightTrackDto createNewWeightTrackDto);
+
 }

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.jasmin.exjobb.trainapp.api.dto.CreateNewWeightTrackDto;
 import se.jasmin.exjobb.trainapp.repository.UserRepository;
-import se.jasmin.exjobb.trainapp.repository.WeightTrackRepository;
 import se.jasmin.exjobb.trainapp.repository.entity.WeightTrack;
 
 import java.util.Comparator;
@@ -18,13 +17,12 @@ public class WeightTrackServiceImpl implements WeightTrackService {
     private UserRepository userRepository;
 
     @Override
-    public Optional<WeightTrack> createNewWeightTrack(String id, CreateNewWeightTrackDto createNewWeightTrackDto) {
-        var user =userRepository.findById(Long.parseLong(id));
+    public Optional<WeightTrack> createNewWeightTrack(Long id, CreateNewWeightTrackDto createNewWeightTrackDto) {
+        var user = userRepository.findById(id);
 
         if (user.isEmpty()) {
             return Optional.empty();
         }
-
 
         var foundUser = user.get();
 
@@ -38,9 +36,6 @@ public class WeightTrackServiceImpl implements WeightTrackService {
                 .max(Comparator.comparing(WeightTrack::getCreated))
                 .orElse(null);
         return Optional.ofNullable(savedWeightTrack);
+    }
 
-
-
-
-}
 }

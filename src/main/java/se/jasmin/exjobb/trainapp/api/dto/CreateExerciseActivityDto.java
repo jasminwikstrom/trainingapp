@@ -2,7 +2,7 @@ package se.jasmin.exjobb.trainapp.api.dto;
 
 public class CreateExerciseActivityDto {
 
-    private  int Weight;
+    private int Weight;
 
     public int getWeight() {
         return Weight;

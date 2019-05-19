@@ -6,5 +6,4 @@ import se.jasmin.exjobb.trainapp.repository.entity.WeightTrack;
 
 @Repository
 public interface WeightTrackRepository extends JpaRepository<WeightTrack, Long> {
-
 }

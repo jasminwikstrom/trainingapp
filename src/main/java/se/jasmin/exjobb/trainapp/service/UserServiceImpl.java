@@ -1,12 +1,16 @@
 package se.jasmin.exjobb.trainapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import se.jasmin.exjobb.trainapp.api.dto.CreateNewUserDto;
+import se.jasmin.exjobb.trainapp.repository.RoleRepository;
 import se.jasmin.exjobb.trainapp.repository.UserRepository;
 import se.jasmin.exjobb.trainapp.repository.entity.User;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -14,6 +18,24 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Override
+    public void save(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setRoles(new HashSet<>(roleRepository.findAll()));
+        userRepository.save(user);
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 
     public User createUser(CreateNewUserDto createNewUserDto) {
 
@@ -30,13 +52,7 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.save(newUser);
     }
-
-    @Override
-    public List<User> getUsers(String username) {
-
-        List<User> users = userRepository.findByQuery(username);
-        return users;
-    }
 }
+
 
 
