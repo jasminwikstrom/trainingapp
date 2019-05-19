@@ -2,11 +2,9 @@ package se.jasmin.exjobb.trainapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.jasmin.exjobb.trainapp.api.dto.AverageDto;
-import se.jasmin.exjobb.trainapp.api.dto.AverageStat;
-import se.jasmin.exjobb.trainapp.api.dto.ProgressDto;
-import se.jasmin.exjobb.trainapp.api.dto.ProgressStat;
+import se.jasmin.exjobb.trainapp.api.dto.*;
 import se.jasmin.exjobb.trainapp.repository.UserRepository;
+import se.jasmin.exjobb.trainapp.repository.entity.Exercise;
 import se.jasmin.exjobb.trainapp.repository.entity.ExerciseActivity;
 
 import java.time.LocalDateTime;
@@ -47,7 +45,7 @@ public class StatServiceImpl implements StatService {
 
         var exerciseActivityList = exercise.getExerciseActivityList().stream()
                 .filter(activity -> !activity.getCreated().isBefore(from))
-                .filter(activity -> !activity.getCreated().isAfter(to) )
+                .filter(activity -> !activity.getCreated().isAfter(to))
                 .collect(Collectors.toList());
 
         if (exerciseActivityList.isEmpty()) {
@@ -66,7 +64,7 @@ public class StatServiceImpl implements StatService {
         var lastActivity = exerciseActivityList.stream()
                 .max(Comparator.comparing(ExerciseActivity::getCreated));
 
-        var diff = lastActivity.get().getWeight() - firstActivity.get().getWeight() ;
+        var diff = lastActivity.get().getWeight() - firstActivity.get().getWeight();
 
         var progressStat = new ProgressStat();
         progressStat.setStartWeight(firstActivity.get().getWeight());
@@ -78,7 +76,7 @@ public class StatServiceImpl implements StatService {
 
 
     @Override
-    public AverageStat getAverage(AverageDto averageDto,Long userId, String id) {
+    public AverageStat getAverage(AverageDto averageDto, Long userId, String id) {
 
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -105,7 +103,7 @@ public class StatServiceImpl implements StatService {
 
         var exerciseActivityList = exercise.getExerciseActivityList().stream()
                 .filter(activity -> !activity.getCreated().isBefore(from))
-                .filter(activity -> !activity.getCreated().isAfter(to) )
+                .filter(activity -> !activity.getCreated().isAfter(to))
                 .collect(Collectors.toList());
 
         if (exerciseActivityList.isEmpty()) {
@@ -127,8 +125,7 @@ public class StatServiceImpl implements StatService {
         var lastActivity = exerciseActivityList.stream()
                 .max(Comparator.comparing(ExerciseActivity::getCreated));
 
-        double avg = (double)allActivityWeight / (double)exerciseActivityList.size();
-
+        double avg = (double) allActivityWeight / (double) exerciseActivityList.size();
 
 
         var averageStat = new AverageStat();
@@ -137,10 +134,37 @@ public class StatServiceImpl implements StatService {
         averageStat.setAverage(avg);
 
 
-
         return averageStat;
 
     }
+
+    @Override
+    public Exercise getHistory(long userId, String id) {
+
+        var user = userRepository.findById(userId);
+
+        if (user.isEmpty()) {
+            return null;
+        }
+
+        var foundUser = user.get();
+
+        var exercises = foundUser.getExerciseList().stream()
+                .filter(exercise -> exercise.getId() == Long.parseLong(id))
+                .collect(Collectors.toList());
+        if (exercises.size() != 1) {
+            throw new IllegalArgumentException("exercise with id " + id + " does not exist");
+        }
+
+        return exercises.get(0);
+    }
 }
+
+
+
+
+
+
+
 
 

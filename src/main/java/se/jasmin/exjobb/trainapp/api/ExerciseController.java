@@ -10,6 +10,7 @@ import se.jasmin.exjobb.trainapp.api.dto.CreateExerciseActivityDto;
 import se.jasmin.exjobb.trainapp.api.dto.CreateNewExerciseDto;
 import se.jasmin.exjobb.trainapp.api.dto.ProgressDto;
 import se.jasmin.exjobb.trainapp.repository.entity.Exercise;
+import se.jasmin.exjobb.trainapp.repository.entity.User;
 import se.jasmin.exjobb.trainapp.service.AuthFacade;
 import se.jasmin.exjobb.trainapp.service.ExerciseActivityService;
 import se.jasmin.exjobb.trainapp.service.ExerciseService;
@@ -17,7 +18,6 @@ import se.jasmin.exjobb.trainapp.service.StatService;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 
 @RestController
 @RequestMapping("/exercises")
@@ -41,19 +41,8 @@ public class ExerciseController {
             @RequestBody CreateNewExerciseDto createNewExerciseDto) {
 
         var loggedInUser = authFacade.getLoggedInUser(authentication.getName());
-
         var savedExercise = exerciseService.createExercise(loggedInUser, createNewExerciseDto);
-
         return ResponseEntity.ok(savedExercise).getBody();
-    }
-
-
-    @GetMapping
-    public Exercise getAllExercises(@RequestParam(value = "name", required = false) String title) {
-
-        Exercise exercise = (Exercise) exerciseService.getExercises(title);
-
-        return exercise;
     }
 
     @PostMapping("/{id}/exerciseactivities")
@@ -62,28 +51,14 @@ public class ExerciseController {
             @PathVariable(value = "id") String id,
             @RequestBody CreateExerciseActivityDto createExerciseActivityDto) {
 
-        var loggedInUser = authFacade.getLoggedInUser(authentication.getName());
-
-        var exerciseLongValue = Long.valueOf(id);
-
-        var exerciseIds = loggedInUser.getExerciseList().stream()
-                .map(Exercise::getId)
-                .collect(Collectors.toList());
-
-        if (!exerciseIds.contains(exerciseLongValue)) {
-            throw new IllegalArgumentException("user does not have an exercise with id " + exerciseLongValue);
-        }
-
+        validatePermission(authentication, id);
         var optionalExerciseActivity = exerciseActivityService.createNewExerciseActivity(id, createExerciseActivityDto);
-
         if (optionalExerciseActivity.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok(optionalExerciseActivity.get());
         }
-
     }
-
 
     @GetMapping("/{id}/progress")
     public ResponseEntity getProgress(
@@ -91,24 +66,9 @@ public class ExerciseController {
             @PathVariable(value = "id") String id,
             @RequestBody ProgressDto progressDto) {
 
-        var loggedInUser = authFacade.getLoggedInUser(authentication.getName());
-
-
-        var exerciseLongValue = Long.valueOf(id);
-
-        var exerciseIds = loggedInUser.getExerciseList().stream()
-                .map(Exercise::getId)
-                .collect(Collectors.toList());
-
-        if (!exerciseIds.contains(exerciseLongValue)) {
-            throw new IllegalArgumentException("user does not have an exercise with id " + exerciseLongValue);
-        }
-
+        var loggedInUser = validatePermission(authentication, id);
         var progress = statService.getProgress(progressDto, loggedInUser.getId(), id);
-
         return ResponseEntity.ok(progress);
-
-
     }
 
     @GetMapping("/{id}/average")
@@ -117,12 +77,26 @@ public class ExerciseController {
             @PathVariable(value = "id") String id,
             @RequestBody AverageDto averageDto) {
 
+        var loggedInUser = validatePermission(authentication, id);
+        var average = statService.getAverage(averageDto, loggedInUser.getId(), id);
+        return ResponseEntity.ok(average);
+    }
 
+    @GetMapping("/{id}")
+    public ResponseEntity getHistory(
+            Authentication authentication,
+            @PathVariable(value = "id") String id) {
+
+        var loggedInUser = validatePermission(authentication, id);
+        var history = statService.getHistory(loggedInUser.getId(), id);
+
+        return ResponseEntity.ok(history);
+    }
+
+    private User validatePermission(Authentication authentication, String id) {
         var loggedInUser = authFacade.getLoggedInUser(authentication.getName());
 
-
         var exerciseLongValue = Long.valueOf(id);
-
         var exerciseIds = loggedInUser.getExerciseList().stream()
                 .map(Exercise::getId)
                 .collect(Collectors.toList());
@@ -130,12 +104,6 @@ public class ExerciseController {
         if (!exerciseIds.contains(exerciseLongValue)) {
             throw new IllegalArgumentException("user does not have an exercise with id " + exerciseLongValue);
         }
-
-
-        var average = statService.getAverage(averageDto, loggedInUser.getId(),id);
-
-        return ResponseEntity.ok(average);
-
-
+        return loggedInUser;
     }
 }
