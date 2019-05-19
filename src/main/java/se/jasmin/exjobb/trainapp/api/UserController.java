@@ -6,7 +6,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import se.jasmin.exjobb.trainapp.api.dto.CreateNewWeightTrackDto;
 import se.jasmin.exjobb.trainapp.repository.entity.User;
 import se.jasmin.exjobb.trainapp.service.AuthFacade;
@@ -48,7 +51,6 @@ public class UserController {
         }
 
         userService.save(userForm);
-
         securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
 
         return "redirect:/welcome";

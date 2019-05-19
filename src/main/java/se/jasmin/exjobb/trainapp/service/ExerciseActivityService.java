@@ -11,6 +11,4 @@ public interface ExerciseActivityService {
 
     Optional<ExerciseActivity> createNewExerciseActivity(String id, CreateExerciseActivityDto createExerciseActivityDto);
 
-
-
 }

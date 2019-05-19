@@ -12,7 +12,7 @@ public class AverageDto {
         this.total = total;
     }
 
-    private  String total;
+    private String total;
 
     public String getFrom() {
         return from;

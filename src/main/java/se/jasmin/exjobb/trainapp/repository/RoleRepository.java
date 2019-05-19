@@ -5,3 +5,4 @@ import se.jasmin.exjobb.trainapp.repository.entity.Role;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {
 }
+

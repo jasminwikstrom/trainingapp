@@ -26,7 +26,7 @@ public class Exercise {
     @Column(name = "description")
     private String description;
 
-    @Column (name = "muscle_group")
+    @Column(name = "muscle_group")
     @Enumerated(value = EnumType.STRING)
     private MuscleGroup muscleGroup;
 
